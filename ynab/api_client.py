@@ -60,13 +60,21 @@ class ApiClient(object):
         'object': object,
     }
 
-    def __init__(self, configuration=None, header_name=None, header_value=None,
-                 cookie=None):
+    _pool = None
+
+    # April 2024: Updates for pool_threads taken from:
+    # https://github.com/dmlerner/ynab-api/blob/master/ynab_api/api_client.py
+    def __init__(self,
+                 configuration=None,
+                 header_name=None,
+                 header_value=None,
+                 cookie=None,
+                 pool_threads=1):
         if configuration is None:
             configuration = Configuration()
         self.configuration = configuration
+        self.pool_threads = pool_threads
 
-        self.pool = ThreadPool()
         self.rest_client = rest.RESTClientObject(configuration)
         self.default_headers = {}
         if header_name is not None:
@@ -75,9 +83,29 @@ class ApiClient(object):
         # Set default User-Agent.
         self.user_agent = 'Swagger-Codegen/1.0.0/python'
 
-    def __del__(self):
-        self.pool.close()
-        self.pool.join()
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        self.close()
+
+    def close(self):
+        if self._pool:
+            self._pool.close()
+            self._pool.join()
+            self._pool = None
+            if hasattr(atexit, 'unregister'):
+                atexit.unregister(self.close)
+
+    @property
+    def pool(self):
+        """Create thread pool on first request
+         avoids instantiating unused threadpool for blocking clients.
+        """
+        if self._pool is None:
+            atexit.register(self.close)
+            self._pool = ThreadPool(self.pool_threads)
+        return self._pool
 
     @property
     def user_agent(self):

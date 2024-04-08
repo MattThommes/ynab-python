@@ -151,8 +151,8 @@ class MonthDetail(object):
         :param age_of_money: The age_of_money of this MonthDetail.  # noqa: E501
         :type: float
         """
-        if age_of_money is None:
-            raise ValueError("Invalid value for `age_of_money`, must not be `None`")  # noqa: E501
+        #if age_of_money is None:
+            #raise ValueError("Invalid value for `age_of_money`, must not be `None`")  # noqa: E501
 
         self._age_of_money = age_of_money
 
