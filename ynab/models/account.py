@@ -150,6 +150,7 @@ class Account(object):
         :param type: The type of this Account.  # noqa: E501
         :type: str
         """
+        logger.debug("account.py > Setting type=%s", type)
         if type is None:
             raise ValueError("Invalid value for `type`, must not be `None`")  # noqa: E501
         allowed_values = ["medicalDebt", "checking", "savings", "creditCard", "cash", "lineOfCredit", "merchantAccount", "payPal", "investmentAccount", "mortgage", "otherAsset", "otherLiability"]  # noqa: E501
