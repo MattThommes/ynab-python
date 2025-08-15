@@ -153,10 +153,10 @@ class Account(object):
         logger.debug("account.py > Setting type=%s", type)
         if type is None:
             raise ValueError("Invalid value for `type`, must not be `None`")  # noqa: E501
-        allowed_values = ["medicalDebt", "checking", "savings", "creditCard", "cash", "lineOfCredit", "merchantAccount", "payPal", "investmentAccount", "mortgage", "otherAsset", "otherLiability"]  # noqa: E501
+        allowed_values = ["autoLoan", "medicalDebt", "checking", "savings", "creditCard", "cash", "lineOfCredit", "merchantAccount", "payPal", "investmentAccount", "mortgage", "otherAsset", "otherLiability"]  # noqa: E501
         if type not in allowed_values:
             raise ValueError(
-                "Invalid value for `type` ({0}), must be one of {1}"  # noqa: E501
+                "MATT DEBUG Invalid value for `type` ({0}), must be one of {1}"  # noqa: E501
                 .format(type, allowed_values)
             )
 
